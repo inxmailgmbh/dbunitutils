@@ -101,7 +101,7 @@ public class XmlDatasetSeeder implements DataSeeder
 		
 		
 		// used to avoid problems with boolean
-		//con.getConfig().setProperty( DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new DefaultDataTypeFactory() );
+		con.getConfig().setProperty( DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new DefaultDataTypeFactory() );
 		databaseConnection = con;
 	}
 

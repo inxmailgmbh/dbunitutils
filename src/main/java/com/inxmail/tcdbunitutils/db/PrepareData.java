@@ -16,6 +16,9 @@ import java.lang.annotation.Target;
 public @interface PrepareData
 {
 
-	String value();
+	String dataSetFile();
+
+
+	String dataSourceName() default "";
 
 }

@@ -12,6 +12,8 @@ public final class Configuration
 
 	private static final String PROPERTIES_NAME = "inxdbunit.properties";
 
+	private static final String DATASOURCE_NAME = "db.datasource";
+
 	private static final String JDBC_URL = "db.url";
 
 	private static final String USERNAME = "db.username";
@@ -79,11 +81,19 @@ public final class Configuration
 
 	private void createDatabaseConfiguration()
 	{
-		String dbURL = (String)properties.get( JDBC_URL );
-		String username = (String)properties.get( USERNAME );
-		String password = (String)properties.get( PASSWORD );
+		String dataSourceName = (String)properties.get( DATASOURCE_NAME );
+		if( null != dataSourceName && !dataSourceName.isEmpty() )
+		{
+			databaseConfiguration = new DatabaseConfiguration( dataSourceName );
+		}
+		else
+		{
+			String dbURL = (String)properties.get( JDBC_URL );
+			String username = (String)properties.get( USERNAME );
+			String password = (String)properties.get( PASSWORD );
+			databaseConfiguration = new DatabaseConfiguration( dbURL, username, password );
+		}
 		String initialSql = (String)properties.get( INITIAL_SQL );
-		databaseConfiguration = new DatabaseConfiguration( dbURL, username, password );
 		databaseConfiguration.setInitStatement( initialSql );
 	}
 

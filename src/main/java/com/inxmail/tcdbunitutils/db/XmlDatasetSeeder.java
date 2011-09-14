@@ -6,9 +6,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.DatabaseDataSourceConnection;
+import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.datatype.DefaultDataTypeFactory;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
@@ -24,7 +29,7 @@ import com.inxmail.tcdbunitutils.configuration.DatabaseConfiguration;
 public class XmlDatasetSeeder implements DataSeeder
 {
 
-	private DatabaseConnection databaseConnection;
+	private IDatabaseConnection databaseConnection;
 
 	private final DatabaseConfiguration dbConfig;
 
@@ -88,16 +93,23 @@ public class XmlDatasetSeeder implements DataSeeder
 	}
 
 
-	private void setupDatabase() throws IOException, SQLException, DatabaseUnitException
+	private void setupDatabase() throws IOException, SQLException, DatabaseUnitException, NamingException
 	{
 		if( null != databaseConnection )
 		{
 			return;
 		}
 
-		DatabaseConnection con = new DatabaseConnection( DriverManager.getConnection( dbConfig.getUrl(), dbConfig
-				.getUsername(), dbConfig.getPassword() ) );
-
+		IDatabaseConnection con;
+		if( null != dbConfig.getDataSource() )
+		{
+			con = new DatabaseDataSourceConnection( new InitialContext(), dbConfig.getDataSource() );
+		}
+		else
+		{
+			con = new DatabaseConnection( DriverManager.getConnection( dbConfig.getUrl(), dbConfig.getUsername(),
+					dbConfig.getPassword() ) );
+		}
 		// used to avoid problems with boolean
 		con.getConfig().setProperty( DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new DefaultDataTypeFactory() );
 		databaseConnection = con;

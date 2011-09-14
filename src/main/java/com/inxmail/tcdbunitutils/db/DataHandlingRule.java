@@ -22,7 +22,7 @@ public class DataHandlingRule extends TestWatchman
 			return;
 		}
 
-		DataSeeder dataSeeder = createDataSeeder( pc.value() );
+		DataSeeder dataSeeder = createDataSeeder( pc.dataSetFile(), pc.dataSourceName() );
 		try
 		{
 			dataSeeder.prepare();
@@ -40,11 +40,10 @@ public class DataHandlingRule extends TestWatchman
 		PrepareData pc = method.getAnnotation( PrepareData.class );
 		if( null == pc )
 		{
-
 			return;
 		}
 
-		DataSeeder dataSeeder = createDataSeeder( pc.value() );
+		DataSeeder dataSeeder = createDataSeeder( pc.dataSetFile(), pc.dataSourceName() );
 
 		try
 		{
@@ -57,12 +56,14 @@ public class DataHandlingRule extends TestWatchman
 	}
 
 
-	private DataSeeder createDataSeeder( String fileName )
+	private DataSeeder createDataSeeder( String dataSetName, String dataSourceName )
 	{
 		DatabaseConfiguration databaseConfiguration = Configuration.instance().getDatabaseConfiguration();
-		DataSeeder dataSeeder = null;
-		dataSeeder = new XmlDatasetSeeder( fileName, databaseConfiguration );
-		return dataSeeder;
+		if( !dataSourceName.isEmpty() )
+		{
+			databaseConfiguration.setDataSourceName( dataSourceName );
+		}
+		return new XmlDatasetSeeder( dataSetName, databaseConfiguration );
 	}
 
 }

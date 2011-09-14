@@ -1,11 +1,11 @@
 package com.inxmail.tcdbunitutils.db;
 
-import com.inxmail.tcdbunitutils.configuration.DatabaseConfiguration;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -15,11 +15,11 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 
+import com.inxmail.tcdbunitutils.configuration.DatabaseConfiguration;
+
 
 /**
- * 
  * @author Bartosz Majsak
- *
  */
 public class XmlDatasetSeeder implements DataSeeder
 {
@@ -29,7 +29,8 @@ public class XmlDatasetSeeder implements DataSeeder
 	private final DatabaseConfiguration dbConfig;
 
 	private final String xmlFile;
-	
+
+
 	public XmlDatasetSeeder( String xmlFile, DatabaseConfiguration dbConfig )
 	{
 		this.dbConfig = dbConfig;
@@ -87,19 +88,16 @@ public class XmlDatasetSeeder implements DataSeeder
 	}
 
 
-	private void setupDatabase()
-			throws IOException, SQLException, DatabaseUnitException
+	private void setupDatabase() throws IOException, SQLException, DatabaseUnitException
 	{
 		if( null != databaseConnection )
 		{
 			return;
 		}
-	
-		DatabaseConnection con = new DatabaseConnection( DriverManager.getConnection( dbConfig.getUrl(), dbConfig.
-				getUsername(),
-				dbConfig.getPassword() ) );
-		
-		
+
+		DatabaseConnection con = new DatabaseConnection( DriverManager.getConnection( dbConfig.getUrl(), dbConfig
+				.getUsername(), dbConfig.getPassword() ) );
+
 		// used to avoid problems with boolean
 		con.getConfig().setProperty( DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new DefaultDataTypeFactory() );
 		databaseConnection = con;
@@ -120,6 +118,5 @@ public class XmlDatasetSeeder implements DataSeeder
 		IDataSet dataSet = databaseConnection.createDataSet();
 		DatabaseOperation.DELETE_ALL.execute( databaseConnection, dataSet );
 	}
-
 
 }

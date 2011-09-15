@@ -35,7 +35,6 @@ public class XmlDatasetSeeder implements DataSeeder
 
 	private final String xmlFile;
 
-
 	public XmlDatasetSeeder( String xmlFile, DatabaseConfiguration dbConfig )
 	{
 		this.dbConfig = dbConfig;
@@ -51,6 +50,7 @@ public class XmlDatasetSeeder implements DataSeeder
 			setupDatabase();
 			applyInitStatement();
 			fillDatabase();
+			close();
 		}
 		catch( Exception e )
 		{
@@ -67,6 +67,21 @@ public class XmlDatasetSeeder implements DataSeeder
 		{
 			setupDatabase();
 			cleanDatabase();
+			close();
+		}
+		catch( Exception e )
+		{
+			throw new RuntimeException( e );
+		}
+	}
+
+
+	private void close()
+	{
+		try
+		{
+			if( databaseConnection != null )
+				databaseConnection.close();
 		}
 		catch( Exception e )
 		{
@@ -130,5 +145,6 @@ public class XmlDatasetSeeder implements DataSeeder
 		IDataSet dataSet = databaseConnection.createDataSet();
 		DatabaseOperation.DELETE_ALL.execute( databaseConnection, dataSet );
 	}
+
 
 }

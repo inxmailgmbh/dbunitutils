@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.inxmail</groupId>
-	<artifactId>tc-dbunitutils</artifactId>
+	<artifactId>dbunitutils</artifactId>
 	<version>0.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>tc-dbunitutils</name>
+	<name>dbunitutils</name>
 	<url>http://www.inxmail.de</url>
 	<ciManagement>
 		<system>hudson</system>
@@ -18,12 +18,11 @@
 		<url>scm:git:ssh://git@dev.srv.inxmail.de/tc/tc-dbunitutils.git</url>
 		<developerConnection>scm:git:ssh://git@dev.srv.inxmail.de/tc/tc-dbunitutils.git</developerConnection>
 	</scm>
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
+			<version>4.9</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -119,23 +118,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.4.1</version>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>./</directory>
-							<includes>
-								<include>gfembed*tmp/</include>
-								<include>null/</include>
-								<include>**/*.log</include>
-							</includes>
-							<followSymlinks>false</followSymlinks>
-						</fileset>
-					</filesets>
-				</configuration>
 			</plugin>
 		</plugins>
 		<pluginManagement>

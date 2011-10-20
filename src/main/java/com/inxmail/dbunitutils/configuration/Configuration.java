@@ -26,8 +26,12 @@ import java.util.Properties;
 public final class Configuration
 {
 
-	private static final String PROPERTIES_NAME = "inxdbunit.properties";
-
+	private static final String PROPERTIES_NAME = "dbunit.properties";
+	
+	/*
+	 * adding jndi datasource
+	 * @author Luca Graf
+	 */
 	private static final String DATASOURCE_NAME = "db.datasource";
 
 	private static final String JDBC_URL = "db.url";
@@ -94,7 +98,10 @@ public final class Configuration
 		return databaseConfiguration;
 	}
 
-
+	/*
+	 * adding jndi datasource to usage
+	 * @author Luca Graf
+	 */
 	private void createDatabaseConfiguration()
 	{
 		String dataSourceName = (String)properties.get( DATASOURCE_NAME );

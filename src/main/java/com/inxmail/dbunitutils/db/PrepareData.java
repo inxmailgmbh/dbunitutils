@@ -34,7 +34,11 @@ public @interface PrepareData
 
 	String dataSetFile();
 
-
+	/**
+	 * 
+	 * @return the name of the datasource
+	 * @author Luca Graf
+	 */
 	String dataSourceName() default "";
 
 }

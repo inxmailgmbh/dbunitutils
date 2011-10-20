@@ -16,44 +16,26 @@
  */
 package com.inxmail.dbunitutils.db;
 
-import org.junit.rules.TestWatchman;
-import org.junit.runners.model.FrameworkMethod;
 
 import com.inxmail.dbunitutils.configuration.Configuration;
 import com.inxmail.dbunitutils.configuration.DatabaseConfiguration;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 
 /**
- * @author Bartosz Majsak
+ * Original class from Bartosz Majsak uses <code>TestWatchman</code> which is depracted since JUnit 4.9.
+ * Changed to TestWatcher as recommended by JUnit.
+ * 
+ * @author Stefan Biermann
  */
-public class DataHandlingRule extends TestWatchman
+public class DataHandlingRule extends TestWatcher
 {
-
 	@Override
-	public void starting( FrameworkMethod method )
+	protected void finished( Description description )
 	{
-		PrepareData pc = method.getAnnotation( PrepareData.class );
-		if( null == pc )
-		{
-			return;
-		}
-
-		DataSeeder dataSeeder = createDataSeeder( pc.dataSetFile(), pc.dataSourceName() );
-		try
-		{
-			dataSeeder.prepare();
-		}
-		catch( Exception e )
-		{
-			throw new RuntimeException( e );
-		}
-	}
-
-
-	@Override
-	public void finished( FrameworkMethod method )
-	{
-		PrepareData pc = method.getAnnotation( PrepareData.class );
+		super.finished( description );
+		PrepareData pc = description.getAnnotation( PrepareData.class );
 		if( null == pc )
 		{
 			return;
@@ -72,6 +54,27 @@ public class DataHandlingRule extends TestWatchman
 	}
 
 
+	@Override
+	protected void starting( Description description )
+	{
+		super.starting( description );
+		PrepareData pc = description.getAnnotation( PrepareData.class );
+		if( null == pc )
+		{
+			return;
+		}
+		DataSeeder dataSeeder = createDataSeeder( pc.dataSetFile(), pc.dataSourceName() );
+		try
+		{
+			dataSeeder.prepare();
+		}
+		catch( Exception e )
+		{
+			throw new RuntimeException( e );
+		}
+	}
+
+	
 	private DataSeeder createDataSeeder( String dataSetName, String dataSourceName )
 	{
 		DatabaseConfiguration databaseConfiguration = Configuration.instance().getDatabaseConfiguration();
